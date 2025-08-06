@@ -1,0 +1,69 @@
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쿵쿵따리 쿵쿵따</title>
+</head>
+<body>
+    <p>죽음의 쿵쿵따</p>
+    <div><span id=totaluser>n</span>명의 참가자 중 <span id="user">1</span>번째 참가자</div>
+    <div><span id="turn">1</span>턴째</div>
+    <div>제시어 :<span id="word"></span></div>
+    <input type="text">
+    <button>등록</button>
+
+    <div> 입력한 단어들 </div>
+    <div>-><span id="kkey"></span></div>
+
+<script>
+    const number = Number(prompt('총 참가자는 몇 명인가요 ?')); //prompt를 이용하여 입력 값 받아서 int 형태로 number에 저장
+    if(number) {
+    const $totaluser = document.querySelector('#totaluser'); //html #totaluser 값 복사 
+        $totaluser.textContent = number; // html에 totaluser에 number값으로 변경
+
+    const $button = document.querySelector('button'); // 직접 html 버튼
+    const $input = document.querySelector('input'); // 직접 input [텍스트]
+    const $word = document.querySelector('#word'); // 제시어 : [이 부분]
+    const $order = document.querySelector('#user'); // [n]번째 참가자
+    const $kkey = document.querySelector('#kkey'); // 입력한 단어들 리스트(배열) 형태로 출력
+    let word; // 제시어 저장
+    let newWord; // 입력받은 제시어 저장
+    let $turn = document.querySelector('#turn'); // 턴수 
+    let turncount = Number($turn.textContent); // 턴수 변수로 저장
+    let key = [];
+
+    function inPut (event) { // 입력 받은 값 새로 저장하기.
+        newWord = event.target.value // event 값 , 마지막에 들어온 값을 newWord에 저장
+    };
+
+    function cLick () {    
+        if((!word || newWord[0] === word[word.length-1]) && newWord.length === 3){  // word값이 비어있거나 word[-1] newWord[0] 값이 같으면서 3글자인것
+            word = newWord;
+            $word.textContent = word; //html 에 newWord 에 저장된 문장 출력
+            const order = Number($order.textContent)
+            key.push(word); // 단어 밑에 출력하게 key[] 배열에 추가
+            $kkey.textContent = key; // 추가 후 배열 출력
+            if(order + 1 > number) { //user 몇 번째 순서인지 
+                $order.textContent = 1; // number보다 크다면 1 로 초기화
+                $turn.textContent = turncount + 1; // 턴 카운트 +1 , user카운트가 끝나면 1턴이기에    
+            } else {
+                $order.textContent = order + 1; // count ++
+            }
+
+        } else { // 3글자가 아닐때
+            alert('잘못된 단어 혹은 길이입니다.  다시 입력해주세요 :)')
+        }
+        $input.value = ''; // input 창 공백으로변경
+        $input.focus(); // input 창 커서 깜빡깜빡으로 변경
+    }
+
+    $input.addEventListener('input', inPut); // input 값 이벤트 inPut 함수로 전달
+    $button.addEventListener('click', cLick);
+
+    // 진주에게 피드백 받음 .. 8/7 야르 ㅋㅋ
+} else {
+    alert('선택 사항 없음으로 프로그램 중지, 실행을 원하시면 새로고침을 해주세요');
+}
+</script>    
+</body>
+</html>
