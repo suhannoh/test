@@ -1,0 +1,67 @@
+<h1>click conut ~!! </h1>
+<button id="btn1">B</button> <button id="btn2">C</button> <button id="clr">color</button>
+<p>count : <span id = "cnt">0</span> </p>
+<p>to do ? <input type="text" id="toId"> <button id="toBtn">add</button></p>
+<ul id="todolist"> To Do !</ul>
+<p>password : <input type="password" id="pass"><button id="passb">O</button></p>
+<span id="ox"> </span>
+
+const $btn1 = document.getElementById("btn1");
+const $btn2 = document.getElementById("btn2");
+const $cnt = document.getElementById("cnt");
+const $clr = document.getElementById("clr");
+const $toId = document.getElementById("toId");
+const $toBtn = document.getElementById("toBtn");
+const $todolist = document.getElementById("todolist");
+const $pass = document.getElementById("pass");
+const $passw = document.getElementById("passb");
+const $ox = document.getElementById("ox");
+let bc = 0;
+let toDo = '';
+let password = '';
+
+
+$btn1.addEventListener("click",() => {
+      bc++;
+      $cnt.textContent = bc;
+})
+
+$btn2.addEventListener("click",() => {
+      bc = 0;
+      $cnt.textContent = bc;
+      document.body.style.backgroundColor = "white";
+})
+
+$clr.addEventListener("click",() => {
+      const color = "#" + Math.floor(Math.random()*16777215).toString(16);
+      document.body.style.backgroundColor = color;
+})
+
+$toBtn.addEventListener("click", () => {
+  toDo = $toId.value.trim();
+
+  if (toDo.trim() === "") return;
+  else {
+  const li = document.createElement("li");
+  li.textContent = toDo;
+  $todolist.appendChild(li);
+  $toId.value = "";
+
+  const deleteBtn = document.createElement("button");
+deleteBtn.textContent = "X";
+deleteBtn.addEventListener("click", () => {
+  li.remove();
+});
+li.appendChild(deleteBtn);
+  }
+})
+
+$pass.addEventListener("input", (event) => {
+  password = event.target.value;
+})
+
+$passw.addEventListener("click", () => {
+  if(password.length < 8) $ox.textContent = "8글자 이상 plz";
+  else if(password.length < 20) $ox.textContent = "Gooood !!"
+  else $ox.textContent = "Looooooong";
+})
