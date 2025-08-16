@@ -1,0 +1,173 @@
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do list</title>
+</head>
+<body>
+  <!-- 로그인/회원가입 페이지 -->
+  <div id="main"> 
+  <h1>반갑읍니다 </h1>
+  <button id="Login" style="font-size : 20px">로그인</button>
+  <button id="Reg" style="font-size : 20px">회원가입</button>
+  <p id="Test"> </p>
+  </div>
+
+  <!-- 로그인 구현 -->
+  <div id="loginPage" style="display: none;">
+    <h1>로그인 페이지</h1>
+    <p>ID : <input type="text" id="userCheckId"></p>
+    <p>PassWord : <input type="password" id="userCheckPw"></p>
+    <button id="loginBack">뒤로가기</button>
+    <button id="loginBtn">전송</button>
+  </div>
+
+  <!-- 회원가입 구현 -->
+  <div id="regPage" style="display: none">
+    <h1>회원가입 페이지</h1>
+    <p>ID : <input type="text" id="userId"> </p>
+    <p>Password : <input type="password" id="userPw"></p>
+    <button id="regBack">뒤로가기</button>
+    <button id="regBtn">완료하기</button>
+  </div>
+
+<!-- 로그인 완료 시 투두리스트 -->
+  <div id="todoDisplay" style="display: none">
+  <h1>오늘의 할 일을 추가해보세요</h1>
+  <input type="text" id="todoinput" placeholder="입력해주세용"> 
+  <button id="todobutton">전송</button><button id="todoListColor">배경색변경</button>
+  <ul id="todolist">
+  
+  </ul>  
+
+
+<script>
+// DOM 함수 선언
+const $todoinput = document.getElementById("todoinput"); //입력
+const $todobutton = document.getElementById("todobutton"); //버튼
+const $todolist = document.getElementById("todolist");
+const $Login = document.getElementById("Login"); //버튼
+const $reg = document.getElementById("reg");
+const $Reg = document.getElementById("Reg");
+const $Test = document.getElementById("Test");
+const $todoDisplay = document.getElementById("todoDisplay"); //todo_display
+const $loginPage = document.getElementById("loginPage"); //Login_display
+const $main = document.getElementById("main"); //Main_display
+const $regBtn = document.getElementById("regBtn"); //버튼
+const $loginBtn = document.getElementById("loginBtn"); //버튼
+const $userId = document.getElementById("userId");
+const $userPw = document.getElementById("userPw");
+const $regPage = document.getElementById("regPage");
+const $userCheckId = document.getElementById("userCheckId");
+const $userCheckPw = document.getElementById("userCheckPw");
+const $loginBack = document.getElementById("loginBack");
+const $regBack = document.getElementById("regBack");
+const $todoListColor = document.getElementById("todoListColor");
+
+//전역변수
+let usersId = '';
+let usersPw = '';
+
+// MAIN -> 로그인 페이지 출력
+$Login.addEventListener("click", () => {
+  $loginPage.style.display = "block"; 
+  $main.style.display = "none";
+});
+// Login 페이지 -> Main 페이지
+$loginBack.addEventListener("click",()=>{
+  $loginPage.style.display = "none"; 
+  $main.style.display = "block";
+});
+// MAIN -> 회원가입 페이지 출력
+$Reg.addEventListener("click", () => {
+  $regPage.style.display = "block";
+  $main.style.display = "none";
+});
+// Reg 페이지 -> Main 페이지
+$regBack.addEventListener("click",()=>{
+  $regPage.style.display = "none";
+  $main.style.display = "block";
+});
+
+
+// Login 참 거짓
+$loginBtn.addEventListener("click", () => {
+  if($userCheckId.value === usersId && $userCheckPw.value === usersPw) {
+    alert("로그인 성공 ! ");
+    $main.style.display = "none";
+    $loginPage.style.display = "none"; 
+    $todoDisplay.style.display = "block";
+  } else { 
+    alert("아이디 혹은 비밀번호가 틀렸습니다.");
+    $userCheckId.value ='';
+    $userCheckPw.value ='';
+  }
+});
+// 로그인 엔터키 구현
+$userCheckPw.addEventListener("keydown", (e)=>{
+  if(e.key === "Enter") $loginBtn.click();
+});
+// 회원가입 엔터키 구현
+$userPw.addEventListener("keydown", (e)=>{
+  if(e.key === "Enter") $regBtn.click();
+});
+// To-Do List 엔터키 구현
+$todoinput.addEventListener("keydown", (e)=>{
+  if(e.key === "Enter") $todobutton.click();
+});
+
+
+
+// MAIN 회원가입 버튼
+$regBtn.addEventListener("click", () => {
+  usersId = $userId.value;
+  usersPw = $userPw.value;
+  if(usersId !== '' && usersPw !== ''){
+  alert("회원가입이 완료되었습니다");
+  $main.style.display = "block";
+  $regPage.style.display = "none";
+  } else return alert("공백은 사용할 수 없습니다."); 
+});
+
+
+// todolist 추가 버튼
+$todobutton.addEventListener("click", ()=> {
+  let toDo = $todoinput.value.trim();
+  if(toDo === "") return;
+  else {
+  const todoLi = document.createElement("li");
+    todoLi.textContent = toDo;
+    $todolist.appendChild(todoLi);
+    
+  const todoBox = document.createElement("button");
+    todoBox.textContent = "완료";
+    todoLi.appendChild(todoBox);
+    todoBox.style.margin ="5px";
+    todoBox.addEventListener("click", () => {
+    
+    if(todoLi.style.textDecoration === "line-through"){
+    todoLi.style.textDecoration = "none";
+    todoLi.style.backgroundColor = "";
+    } else { 
+      todoLi.style.textDecoration = "line-through";
+      todoLi.style.backgroundColor = "Yellow";
+    }
+  });
+  const tododelbutton = document.createElement("button");
+  tododelbutton.textContent = "삭제";
+  tododelbutton.addEventListener("click", () => {
+    todoLi.remove();
+  });
+  todoLi.appendChild(tododelbutton);
+  }
+  $todoinput.value = '';
+});
+//To-do List 배경색 변경
+$todoListColor.addEventListener("click",()=>{
+  const color = "#" + Math.floor(Math.random()*16777215).toString(16);
+  document.body.style.backgroundColor = color;
+});
+</script>
+
+</body>
+</html>
