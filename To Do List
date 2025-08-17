@@ -5,7 +5,7 @@
     <title>To-Do list</title>
 </head>
 <body>
-  <!-- 로그인/회원가입 페이지 -->
+ <!-- 로그인/회원가입 페이지 -->
   <div id="main"> 
   <h1>반갑읍니다 </h1>
   <button id="Login" style="font-size : 20px">로그인</button>
@@ -36,16 +36,17 @@
   <h1>오늘의 할 일을 추가해보세요</h1>
   <input type="text" id="todoinput" placeholder="입력해주세용"> 
   <button id="todobutton">전송</button><button id="todoListColor">배경색변경</button>
-  <ul id="todolist">
+  <ul id="todo-list">
   
   </ul>  
+</div>
 
 
 <script>
-// DOM 함수 선언
+//DOM 변수 선언
 const $todoinput = document.getElementById("todoinput"); //입력
 const $todobutton = document.getElementById("todobutton"); //버튼
-const $todolist = document.getElementById("todolist");
+const $todolist = document.getElementById("todo-list");
 const $Login = document.getElementById("Login"); //버튼
 const $reg = document.getElementById("reg");
 const $Reg = document.getElementById("Reg");
@@ -68,31 +69,35 @@ const $todoListColor = document.getElementById("todoListColor");
 let usersId = '';
 let usersPw = '';
 
+//화면 전환 함수
+function togglePage(showpage,hidepage){
+  showpage.style.display = "block";
+  hidepage.forEach(page => page.style.display ="none");
+}
+
 // MAIN -> 로그인 페이지 출력
 $Login.addEventListener("click", () => {
-  $loginPage.style.display = "block"; 
-  $main.style.display = "none";
+   togglePage($loginPage, [$main, $regPage, $todoDisplay]);
 });
 // Login 페이지 -> Main 페이지
 $loginBack.addEventListener("click",()=>{
-  $loginPage.style.display = "none"; 
-  $main.style.display = "block";
+  togglePage($main, [$loginPage, $regPage, $todoDisplay]);
 });
 // MAIN -> 회원가입 페이지 출력
 $Reg.addEventListener("click", () => {
-  $regPage.style.display = "block";
-  $main.style.display = "none";
+  togglePage($regPage, [$main, $loginPage, $todoDisplay]);
 });
 // Reg 페이지 -> Main 페이지
 $regBack.addEventListener("click",()=>{
-  $regPage.style.display = "none";
-  $main.style.display = "block";
+  togglePage($main, [$loginPage, $regPage, $todoDisplay]);
 });
 
 
 // Login 참 거짓
 $loginBtn.addEventListener("click", () => {
-  if($userCheckId.value === usersId && $userCheckPw.value === usersPw) {
+  const saveId = localStorage.getItem("userid");
+  const savePw = localStorage.getItem("userpw");
+  if($userCheckId.value === saveId && $userCheckPw.value === savePw) {
     alert("로그인 성공 ! ");
     $main.style.display = "none";
     $loginPage.style.display = "none"; 
@@ -126,7 +131,16 @@ $regBtn.addEventListener("click", () => {
   alert("회원가입이 완료되었습니다");
   $main.style.display = "block";
   $regPage.style.display = "none";
+  localStorage.setItem("userid",usersId);
+  localStorage.setItem("userpw",usersPw);
   } else return alert("공백은 사용할 수 없습니다."); 
+});
+
+// ttodolist 완료버튼
+document.querySelector("#todo-list").addEventListener("click", (e) => {
+  const li = e.target.closest("li");
+  if (!li) return;
+  li.classList.toggle("completed");
 });
 
 
@@ -143,16 +157,7 @@ $todobutton.addEventListener("click", ()=> {
     todoBox.textContent = "완료";
     todoLi.appendChild(todoBox);
     todoBox.style.margin ="5px";
-    todoBox.addEventListener("click", () => {
     
-    if(todoLi.style.textDecoration === "line-through"){
-    todoLi.style.textDecoration = "none";
-    todoLi.style.backgroundColor = "";
-    } else { 
-      todoLi.style.textDecoration = "line-through";
-      todoLi.style.backgroundColor = "Yellow";
-    }
-  });
   const tododelbutton = document.createElement("button");
   tododelbutton.textContent = "삭제";
   tododelbutton.addEventListener("click", () => {
