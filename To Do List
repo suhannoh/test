@@ -3,20 +3,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do list</title>
+    <link rel="stylesheet" href="style.css">
     <style>
         body { 
-          background: black; 
-          color: white; 
-          text-align: center; 
-          font-size: 2rem; 
-          margin : 10px; 
+        position: relative;
+        display : flex;
+        background: rgb(92, 39, 156); 
+        color: white; 
+        text-align: center; 
+        font-size: 2rem; 
+        margin : 0;
+        padding: 0;
+        bottom : 40px;
+        justify-content: center;    
+        align-items: center;
         }
-        button { 
+button { 
           background-color: orange; 
           padding: 12px 40px; 
-          border-radius: 8px; 
+          border-radius: 8px;
         } 
-        input { 
+input { 
           width: 300px; 
           height: 45px; 
           padding: 12px; 
@@ -25,29 +32,33 @@
           border: 1px solid #ccc; 
           box-sizing: border-box; /* padding 포함 계산 */ 
         } 
-        .time { 
+.time { 
           position: fixed; 
           top: 20px; 
           right : 20px; 
           font-size : 14px; 
         }
         
-        .todo {
+.todo {
           text-align: left;
           font-size: 20px;
         }
-        .logout{
+.logout{
           position: fixed; 
           top: 20px; 
           right : 20px; 
           font-size : 14px; 
           margin: 30px auto;
-          background-color: gray;
-        }
-        #todo-list button {
-          padding: 6px 4px; 
           background-color: yellow;
         }
+#todo-list button {
+        padding: 6px 4px; 
+        background-color: rgb(122, 56, 56);
+        }
+#todo-list button:first-of-type {
+        padding: 6px 4px; 
+        background-color: gray;
+    }
 </style>
 </head>
 <body>
@@ -193,7 +204,6 @@ $regBtn.addEventListener("click", () => {
 document.querySelector("#todo-list").addEventListener("click", (e) => {
   const li = e.target.closest("li");
   if (!li) return;
-  li.classList.toggle("completed");
 });
 
 
@@ -201,7 +211,7 @@ document.querySelector("#todo-list").addEventListener("click", (e) => {
 $todobutton.addEventListener("click", ()=> {
   let toDo = $todoinput.value.trim();
   if(toDo === "") return;
-  else {
+  
   const todoLi = document.createElement("li");
     todoLi.textContent = toDo;
     $todolist.appendChild(todoLi);
@@ -210,6 +220,15 @@ $todobutton.addEventListener("click", ()=> {
     todoBox.textContent = "완료";
     todoLi.appendChild(todoBox);
     todoBox.style.margin ="5px";
+    todoBox.addEventListener("click", () => {
+       if (todoBox.style.backgroundColor === "yellow") {
+        todoBox.style.backgroundColor = "";
+        todoLi.style.textDecoration = "" ;// 원래 색으로 복귀
+    } else {
+        todoBox.style.backgroundColor = "yellow";
+        todoLi.style.textDecoration = "line-through"; // 노란색으로 변경
+    }
+    })
     
   const tododelbutton = document.createElement("button");
   tododelbutton.textContent = "삭제";
@@ -217,7 +236,6 @@ $todobutton.addEventListener("click", ()=> {
     todoLi.remove();
   });
   todoLi.appendChild(tododelbutton);
-  }
   $todoinput.value = '';
 });
 //To-do List 배경색 변경
