@@ -3,9 +3,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do list</title>
+    <style>
+        body { 
+          background: black; 
+          color: white; 
+          text-align: center; 
+          font-size: 2rem; 
+          margin : 10px; 
+        }
+        button { 
+          background-color: orange; 
+          padding: 12px 40px; 
+          border-radius: 8px; 
+        } 
+        input { 
+          width: 300px; 
+          height: 45px; 
+          padding: 12px; 
+          font-size: 16px; 
+          border-radius: 8px; 
+          border: 1px solid #ccc; 
+          box-sizing: border-box; /* padding 포함 계산 */ 
+        } 
+        .time { 
+          position: fixed; 
+          top: 20px; 
+          right : 20px; 
+          font-size : 14px; 
+        }
+        
+        .todo {
+          text-align: left;
+          font-size: 20px;
+        }
+        .logout{
+          position: fixed; 
+          top: 20px; 
+          right : 20px; 
+          font-size : 14px; 
+          margin: 30px auto;
+          background-color: gray;
+        }
+        #todo-list button {
+          padding: 6px 4px; 
+          background-color: yellow;
+        }
+</style>
 </head>
 <body>
- <!-- 로그인/회원가입 페이지 -->
+<div id="time" class="time">time</div> 
+<!-- 로그인/회원가입 페이지 -->
   <div id="main"> 
   <h1>반갑읍니다 </h1>
   <button id="Login" style="font-size : 20px">로그인</button>
@@ -32,23 +79,21 @@
   </div>
 
 <!-- 로그인 완료 시 투두리스트 -->
-  <div id="todoDisplay" style="display: none">
+  <div id="todoDisplay" style="display: none" class="todo">
   <h1>오늘의 할 일을 추가해보세요</h1>
   <input type="text" id="todoinput" placeholder="입력해주세용"> 
   <button id="todobutton">전송</button><button id="todoListColor">배경색변경</button>
   <ul id="todo-list">
+  <button id="logout" class ="logout">로그아웃</button>
   
   </ul>  
 </div>
-
-
 <script>
 //DOM 변수 선언
 const $todoinput = document.getElementById("todoinput"); //입력
 const $todobutton = document.getElementById("todobutton"); //버튼
 const $todolist = document.getElementById("todo-list");
 const $Login = document.getElementById("Login"); //버튼
-const $reg = document.getElementById("reg");
 const $Reg = document.getElementById("Reg");
 const $Test = document.getElementById("Test");
 const $todoDisplay = document.getElementById("todoDisplay"); //todo_display
@@ -64,10 +109,19 @@ const $userCheckPw = document.getElementById("userCheckPw");
 const $loginBack = document.getElementById("loginBack");
 const $regBack = document.getElementById("regBack");
 const $todoListColor = document.getElementById("todoListColor");
+const $logout = document.getElementById("logout");
 
 //전역변수
 let usersId = '';
 let usersPw = '';
+let currentUser = null;
+
+//시간 표시
+function updatetime() { 
+const $time = new Date(); document.getElementById('time').textContent = $time; 
+} 
+updatetime(); 
+setInterval(updatetime, 1000);
 
 //화면 전환 함수
 function togglePage(showpage,hidepage){
@@ -99,9 +153,8 @@ $loginBtn.addEventListener("click", () => {
   const savePw = localStorage.getItem("userpw");
   if($userCheckId.value === saveId && $userCheckPw.value === savePw) {
     alert("로그인 성공 ! ");
-    $main.style.display = "none";
-    $loginPage.style.display = "none"; 
-    $todoDisplay.style.display = "block";
+    togglePage($todoDisplay, [$main, $regPage, $loginPage]);
+    currentUser = saveId;
   } else { 
     alert("아이디 혹은 비밀번호가 틀렸습니다.");
     $userCheckId.value ='';
@@ -171,6 +224,9 @@ $todobutton.addEventListener("click", ()=> {
 $todoListColor.addEventListener("click",()=>{
   const color = "#" + Math.floor(Math.random()*16777215).toString(16);
   document.body.style.backgroundColor = color;
+});
+
+$logout.addEventListener("click",()=>{ togglePage($main, [$loginPage, $regPage, $todoDisplay]); 
 });
 </script>
 
