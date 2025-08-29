@@ -5,7 +5,7 @@
     <title>To-Do list</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        body { 
+body { 
         position: relative;
         display : flex;
         background: rgb(92, 39, 156); 
@@ -43,6 +43,15 @@ input {
           text-align: left;
           font-size: 20px;
         }
+.nowid {
+        position: absolute;  /* 화면 기준으로 위치 지정 가능 */
+    top: 8%;              /* 화면 상단 */
+    left: 50%;           /* 가로 중앙 */
+    transform: translateX(-50%); /* 중앙 정렬 보정 */
+    font-size: 2rem;
+    color: white;
+    white-space: nowrap;
+}        
 .logout{
           position: fixed; 
           top: 20px; 
@@ -96,8 +105,11 @@ input {
   <button id="todobutton">전송</button><button id="todoListColor">배경색변경</button>
   <ul id="todo-list">
   <button id="logout" class ="logout">로그아웃</button>
+  <div class="nowid">
+    <span id="nowid" ></span>님 어서오세요
+  </div>
   
-  </ul>  
+  </ul>   
 </div>
 <script>
 //DOM 변수 선언
@@ -121,6 +133,7 @@ const $loginBack = document.getElementById("loginBack");
 const $regBack = document.getElementById("regBack");
 const $todoListColor = document.getElementById("todoListColor");
 const $logout = document.getElementById("logout");
+const $nowid = document.getElementById("nowid");
 
 //전역변수
 let usersId = '';
@@ -166,11 +179,12 @@ $loginBtn.addEventListener("click", () => {
     alert("로그인 성공 ! ");
     togglePage($todoDisplay, [$main, $regPage, $loginPage]);
     currentUser = saveId;
+    $nowid.textContent = currentUser;
   } else { 
     alert("아이디 혹은 비밀번호가 틀렸습니다.");
-    $userCheckId.value ='';
-    $userCheckPw.value ='';
   }
+  $userCheckId.value ='';
+  $userCheckPw.value ='';
 });
 // 로그인 엔터키 구현
 $userCheckPw.addEventListener("keydown", (e)=>{
@@ -197,7 +211,9 @@ $regBtn.addEventListener("click", () => {
   $regPage.style.display = "none";
   localStorage.setItem("userid",usersId);
   localStorage.setItem("userpw",usersPw);
-  } else return alert("공백은 사용할 수 없습니다."); 
+  } else return alert("공백은 사용할 수 없습니다.");
+  $userId.value = "";
+  $userPw.value = "";
 });
 
 // ttodolist 완료버튼
